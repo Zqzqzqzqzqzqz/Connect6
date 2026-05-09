@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>六子棋 · Connect6</title>
+  <meta name="description" content="六子棋人机对战 — 19路棋盘，先连六子者胜" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ── Side Panel ──────────────────────────────────── -->
+  <aside class="panel">
+
+    <div>
+      <div class="panel-title">六子棋</div>
+      <div class="panel-sub">CONNECT 6</div>
+    </div>
+
+    <!-- Status -->
+    <div class="section">
+      <div class="section-label">当前状态</div>
+      <div class="status-row">
+        <span id="status-dot" class="status-dot black"></span>
+        <span id="status-text">选择阵营后开始游戏</span>
+      </div>
+    </div>
+
+    <!-- Stone counts -->
+    <div class="section">
+      <div class="section-label">落子数</div>
+      <div class="counters">
+        <div class="counter">
+          <div class="stone-icon black"></div>
+          <span class="counter-label">黑</span>
+          <span class="counter-val" id="count-black">0</span>
+        </div>
+        <div class="counter">
+          <div class="stone-icon white"></div>
+          <span class="counter-label">白</span>
+          <span class="counter-val" id="count-white">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Side selection -->
+    <div class="section">
+      <div class="section-label">选择阵营</div>
+      <div class="btn-group">
+        <button class="side-btn active" data-side="black">
+          ⚫ 执黑（先手）
+        </button>
+        <button class="side-btn" data-side="white">
+          ⚪ 执白（后手）
+        </button>
+      </div>
+    </div>
+
+    <!-- Difficulty -->
+    <div class="section">
+      <div class="section-label">AI 难度</div>
+      <div class="btn-group">
+        <button class="diff-btn" data-diff="easy">简单</button>
+        <button class="diff-btn active" data-diff="medium">中等</button>
+        <button class="diff-btn" data-diff="hard">困难</button>
+      </div>
+    </div>
+
+    <!-- New Game -->
+    <button id="btn-new" class="btn-primary">开始新局</button>
+
+    <!-- Rules -->
+    <div class="section">
+      <div class="section-label">规则说明</div>
+      <div class="rules">
+        <strong>目标：</strong>率先连成 6 子获胜<br>
+        <strong>落子：</strong>黑方首回合 1 子，之后每回合各落 2 子<br>
+        <strong>换色权：</strong>前三手后白方可选择一次换色<br>
+        <strong>棋盘：</strong>19 × 19，不设禁手
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ── Board Area ──────────────────────────────────── -->
+  <main class="board-area">
+    <div id="board-container">
+      <canvas id="board"></canvas>
+
+      <!-- Swap Dialog -->
+      <div id="swap-dialog" class="overlay hidden">
+        <div class="dialog">
+          <h2>换色权</h2>
+          <p>
+            前三手已完成，白方可选择换色。<br>
+            换色后双方棋子互换，先手优势转移。
+          </p>
+          <div class="dialog-btns">
+            <button id="btn-swap-yes">换色</button>
+            <button id="btn-swap-no">不换</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result Banner -->
+      <div id="result-banner" class="hidden">
+        <div class="result-card">
+          <div id="result-title"></div>
+          <div id="result-sub"></div>
+          <button id="btn-new-result" class="btn-primary" onclick="window._ctrl.newGame()">再来一局</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
