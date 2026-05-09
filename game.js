@@ -682,7 +682,6 @@ class Connect6Controller {
 
   _aiSwapDecision() {
     const sc = evaluate(this.game.board);
-    // AI is currently white. Positive sc = white good.
     const aiAdvantage = (this.aiPlayer === WHITE) ? sc : -sc;
     const shouldSwap = aiAdvantage < -300;
 
@@ -690,25 +689,33 @@ class Connect6Controller {
       this.game.swap();
       [this.humanPlayer, this.aiPlayer] = [this.aiPlayer, this.humanPlayer];
       this._updateSideButtons();
-      this._flashSwapNotice('AI 选择换色');
     } else {
       this.game.declineSwap();
-      this._flashSwapNotice('AI 不换色');
     }
     this._updateStatus();
     this._redraw();
-    if (this.game.currentPlayer === this.aiPlayer && !this.game.gameOver) {
-      setTimeout(() => this._aiTurn(), 350);
-    }
+
+    this._showAINotice(shouldSwap ? '对方选择换色' : '对方选择不换色',
+      shouldSwap ? '双方阵营互换，你已转为白方。' : 'AI 继续执白，请你继续行棋。',
+      () => {
+        if (this.game.currentPlayer === this.aiPlayer && !this.game.gameOver) {
+          setTimeout(() => this._aiTurn(), 200);
+        }
+      });
   }
 
-  _flashSwapNotice(text) {
-    const statusEl = document.getElementById('status-text');
-    if (statusEl) {
-      const original = statusEl.textContent;
-      statusEl.textContent = text;
-      setTimeout(() => { /* status will be refreshed by _updateStatus */ }, 1200);
-    }
+  _showAINotice(title, sub, onClose) {
+    const dlg = document.getElementById('ai-notice-dialog');
+    document.getElementById('ai-notice-title').textContent = title;
+    document.getElementById('ai-notice-sub').textContent = sub;
+    dlg.classList.remove('hidden');
+    const btn = document.getElementById('btn-ai-notice-ok');
+    const handler = () => {
+      btn.removeEventListener('click', handler);
+      dlg.classList.add('hidden');
+      if (onClose) onClose();
+    };
+    btn.addEventListener('click', handler);
   }
 
   _updateSideButtons() {

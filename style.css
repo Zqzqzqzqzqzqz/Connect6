@@ -299,12 +299,12 @@ html, body {
   transition: all .2s;
 }
 
-#btn-swap-yes {
+#btn-swap-yes, #btn-ai-notice-ok {
   background: linear-gradient(135deg, var(--gold), #a07820);
   color: #0d0d18;
   border: none;
 }
-#btn-swap-yes:hover { filter: brightness(1.1); }
+#btn-swap-yes:hover, #btn-ai-notice-ok:hover { filter: brightness(1.1); }
 
 #btn-swap-no {
   background: transparent;
