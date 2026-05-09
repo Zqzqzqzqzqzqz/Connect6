@@ -490,6 +490,7 @@ class Connect6Controller {
     this.difficulty = 'medium';
     this.thinking = false;
     this.swapDialogOpen = false;
+    this.aiNoticeOpen = false;
     this.hoverCell = null;
     this.lastMoves = [];
 
@@ -560,7 +561,7 @@ class Connect6Controller {
   }
 
   _handleCanvasInput(e) {
-    if (this.game.gameOver || this.thinking || this.swapDialogOpen) return;
+    if (this.game.gameOver || this.thinking || this.swapDialogOpen || this.aiNoticeOpen) return;
     if (this.game.currentPlayer !== this.humanPlayer) return;
     const cell = this.renderer.coordFromEvent(e);
     if (cell) this._humanPlace(cell[0], cell[1]);
@@ -709,10 +710,12 @@ class Connect6Controller {
     document.getElementById('ai-notice-title').textContent = title;
     document.getElementById('ai-notice-sub').textContent = sub;
     dlg.classList.remove('hidden');
+    this.aiNoticeOpen = true;
     const btn = document.getElementById('btn-ai-notice-ok');
     const handler = () => {
       btn.removeEventListener('click', handler);
       dlg.classList.add('hidden');
+      this.aiNoticeOpen = false;
       if (onClose) onClose();
     };
     btn.addEventListener('click', handler);
